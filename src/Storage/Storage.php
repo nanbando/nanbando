@@ -81,7 +81,22 @@ class Storage
         return $this->get($file->getName());
     }
 
-    public function push(OutputFormatter $output): void
+    public function push(string $name, OutputFormatter $output): void
+    {
+        $file = $this->get($name);
+
+        foreach ($this->storages as $name => $storage) {
+            $section = $output->section();
+
+            if (!$storage->exists($file)) {
+                $storage->push($file);
+            }
+
+            $section->checkmark('Pushed backup %s', $file->getName());
+        }
+    }
+
+    public function pushAll(OutputFormatter $output): void
     {
         $files = $this->localStorage->listFiles();
 

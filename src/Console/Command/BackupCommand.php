@@ -4,6 +4,8 @@ namespace Nanbando\Console\Command;
 
 use Nanbando\Backup\BackupArchiveFactory;
 use Nanbando\Backup\BackupRunner;
+use Nanbando\Console\OutputFormatter;
+use Nanbando\Storage\Storage;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -22,18 +24,35 @@ class BackupCommand extends Command
      */
     private $factory;
 
-    public function __construct(BackupRunner $backupRunner, BackupArchiveFactory $factory)
-    {
+    /**
+     * @var Storage
+     */
+    private $storage;
+
+    /**
+     * @var OutputFormatter
+     */
+    private $outputFormatter;
+
+    public function __construct(
+        BackupRunner $backupRunner,
+        BackupArchiveFactory $factory,
+        Storage $storage,
+        OutputFormatter $outputFormatter
+    ) {
         parent::__construct();
 
         $this->backupRunner = $backupRunner;
         $this->factory = $factory;
+        $this->storage = $storage;
+        $this->outputFormatter = $outputFormatter;
     }
 
     protected function configure()
     {
         $this->addArgument('label', InputArgument::OPTIONAL);
         $this->addOption('message', 'm', InputOption::VALUE_REQUIRED);
+        $this->addOption('push', 'p', InputOption::VALUE_NONE);
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -43,5 +62,11 @@ class BackupCommand extends Command
         $backupArchive->set('message', $input->getOption('message'));
 
         $this->backupRunner->run($backupArchive);
+
+        if ($input->getOption('push')) {
+            $this->outputFormatter->section()->headline('Push backup %s', $backupArchive->get('name'));
+
+            $this->storage->push($backupArchive->get('name'), $this->outputFormatter);
+        }
     }
 }

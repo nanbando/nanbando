@@ -234,6 +234,28 @@ class StorageSpec extends ObjectBehavior
 
     public function it_should_push_to_remote_storages(
         LocalStorage $localStorage,
+        ArchiveInfo $info,
+        RemoteStorage $remoteStorage1,
+        RemoteStorage $remoteStorage2,
+        OutputFormatter $output,
+        SectionOutputFormatter $section
+    ) {
+        $info->getName()->willReturn('20180415-205000');
+
+        $localStorage->get('20180415-205000')->willReturn($info);
+
+        $remoteStorage1->exists($info)->willReturn(true);
+        $remoteStorage1->push($info)->shouldNotBeCalled();
+        $remoteStorage2->exists($info)->willReturn(false);
+        $remoteStorage2->push($info)->shouldBeCalled();
+
+        $output->section()->willReturn($section);
+
+        $this->push('20180415-205000', $output);
+    }
+
+    public function it_should_push_all_to_remote_storages(
+        LocalStorage $localStorage,
         ArchiveInfo $info1,
         ArchiveInfo $info2,
         RemoteStorage $remoteStorage1,
@@ -258,7 +280,7 @@ class StorageSpec extends ObjectBehavior
 
         $output->section()->willReturn($section);
 
-        $this->push($output);
+        $this->pushAll($output);
     }
 
     public function it_should_list_files(

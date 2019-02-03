@@ -98,6 +98,8 @@
         <service id="Nanbando\Console\Command\BackupCommand">
             <argument type="service" id="Nanbando\Backup\BackupRunner"/>
             <argument type="service" id="Nanbando\Backup\BackupArchiveFactory"/>
+            <argument type="service" id="Nanbando\Storage\Storage"/>
+            <argument type="service" id="Nanbando\Console\OutputFormatter"/>
 
             <tag name="console.command" command="backup"/>
         </service>

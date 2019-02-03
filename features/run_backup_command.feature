@@ -12,6 +12,8 @@ Feature: Run backup command
         And there exists following "backup.php" file
           """
             attach('uploads', \Nanbando\Script\DirectoryScript::create(get('%cwd%/uploads')));
+
+            storage('test', \Nanbando\Storage\DirectoryStorageAdapter::create(get('%cwd%/var/storage/test')));
           """
         And I stop the time at "2018-04-05 20:20"
 
@@ -35,6 +37,9 @@ Feature: Run backup command
           | mode     | string   | full             |
           | started  | datetime | 2018-04-05T20:20 |
           | finished | datetime | 2018-04-05T20:20 |
+        # no push should happen
+        And The file "var/storage/test/20180405-202000.tar.gz" should not exists
+        And The file "var/storage/test/20180405-202000.json" should not exists
 
     Scenario: The backup filename should contain the label
         When I run "bin/nanbando backup testlabel"
@@ -53,3 +58,13 @@ Feature: Run backup command
           | name    | type   | value     |
           | label   | string |           |
           | message | string | mymessage |
+
+    Scenario: The backup file should be pushed
+        When I run "bin/nanbando backup --push"
+        Then The file "var/storage/test/20180405-202000.tar.gz" should exists
+        And The file "var/storage/test/20180405-202000.json" should exists
+
+    Scenario: The backup file should be pushed with shortcut
+        When I run "bin/nanbando backup -p"
+        Then The file "var/storage/test/20180405-202000.tar.gz" should exists
+        And The file "var/storage/test/20180405-202000.json" should exists

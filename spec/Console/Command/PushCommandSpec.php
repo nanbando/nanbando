@@ -42,7 +42,7 @@ class PushCommandSpec extends ObjectBehavior
         OutputFormatter $outputFormatter,
         Storage $storage
     ) {
-        $storage->push($outputFormatter)->shouldBeCalled();
+        $storage->pushAll($outputFormatter)->shouldBeCalled();
 
         $this->run($input, $output);
     }

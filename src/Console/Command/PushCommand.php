@@ -32,7 +32,7 @@ class PushCommand extends Command
     {
         $this->output->headline('Push started');
 
-        $this->storage->push($this->output);
+        $this->storage->pushAll($this->output);
 
         $this->output->info('Push finished');
     }
