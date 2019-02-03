@@ -25,10 +25,8 @@ jobs:
             - ~/.composer
           key: v1-dependencies-{{ checksum "composer.json" }}
 
-      - run: vendor/bin/phpspec run
-      - run: vendor/bin/phpstan analyze src --level 7
-      - run: vendor/bin/php-cs-fixer fix --verbose --diff --dry-run
-      - run: vendor/bin/behat
+      - run: composer test
+      - run: composer lint
       - run:
           name: Upload coverage.xml
           command: |

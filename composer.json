@@ -44,5 +44,20 @@
     },
     "bin": [
         "bin/nanbando"
-    ]
+    ],
+    "scripts": {
+        "lint": [
+            "@phpstan",
+            "@php-cs"
+        ],
+        "test": [
+            "@phpspec",
+            "@behat"
+        ],
+        "phpspec": "vendor/bin/phpspec run",
+        "behat": "vendor/bin/behat",
+        "phpstan": "vendor/bin/phpstan analyze src --level max",
+        "php-cs": "vendor/bin/php-cs-fixer fix --verbose --diff --dry-run",
+        "php-cs-fix": "vendor/bin/php-cs-fixer fix --verbose"
+    }
 }
