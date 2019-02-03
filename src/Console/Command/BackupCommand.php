@@ -64,9 +64,11 @@ class BackupCommand extends Command
         $this->backupRunner->run($backupArchive);
 
         if ($input->getOption('push')) {
-            $this->outputFormatter->section()->headline('Push backup %s', $backupArchive->get('name'));
+            $this->outputFormatter->headline('Push backup %s', $backupArchive->get('name'));
 
             $this->storage->push($backupArchive->get('name'), $this->outputFormatter);
+
+            $this->outputFormatter->info('Push finished');
         }
     }
 }

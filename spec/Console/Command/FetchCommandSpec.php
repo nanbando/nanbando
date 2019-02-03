@@ -42,7 +42,7 @@ class FetchCommandSpec extends ObjectBehavior
         Storage $storage,
         OutputFormatter $outputFormatter
     ) {
-        $input->getArgument('name')->willReturn('20190101-173700');
+        $input->getArgument('file')->willReturn('20190101-173700');
 
         $storage->fetch('20190101-173700', $outputFormatter)->shouldBeCalled();
 

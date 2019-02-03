@@ -112,6 +112,7 @@
         </service>
 
         <service id="Nanbando\Console\Command\RestoreCommand">
+            <argument type="service" id="Nanbando\Storage\Storage"/>
             <argument type="service" id="Nanbando\Restore\RestoreRunner"/>
             <argument type="service" id="Nanbando\Restore\RestoreReader"/>
             <argument type="service" id="Nanbando\Console\OutputFormatter"/>

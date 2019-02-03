@@ -87,6 +87,7 @@ class Storage
 
         foreach ($this->storages as $name => $storage) {
             $section = $output->section();
+            $section->headline('Push to %s', $name);
 
             if (!$storage->exists($file)) {
                 $storage->push($file);
@@ -129,6 +130,8 @@ class Storage
                 $result[$file->getName()] = $file;
             }
         }
+
+        ksort($result);
 
         return array_values($result);
     }

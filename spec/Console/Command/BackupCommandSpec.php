@@ -7,7 +7,6 @@ use Nanbando\Backup\BackupArchiveInterface;
 use Nanbando\Backup\BackupRunner;
 use Nanbando\Console\Command\BackupCommand;
 use Nanbando\Console\OutputFormatter;
-use Nanbando\Console\SectionOutputFormatter;
 use Nanbando\Storage\Storage;
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
@@ -114,8 +113,7 @@ class BackupCommandSpec extends ObjectBehavior
         InputInterface $input,
         OutputInterface $output,
         BackupRunner $backup,
-        BackupArchiveInterface $backupArchive,
-        SectionOutputFormatter $sectionOutputFormatter
+        BackupArchiveInterface $backupArchive
     ) {
         $input->getOption('push')->willReturn(true);
         $input->getArgument('label')->willReturn(null);
@@ -129,8 +127,6 @@ class BackupCommandSpec extends ObjectBehavior
         $backup->run($backupArchive)->shouldBeCalled()->willReturn($backupArchive);
 
         $storage->push('20190101-170000', $outputFormatter)->shouldBeCalled();
-
-        $outputFormatter->section()->willReturn($sectionOutputFormatter);
 
         $this->run($input, $output);
     }
